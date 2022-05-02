@@ -322,7 +322,7 @@ local Energy_table = {
   ["liquid-glycerol"]    = { fv = 145.1, bp = 290 } --liquid glycerol (22.6 MJ/L = 1.261 kg/L * 92.1 g/mol * 1654 kJ/mol)
 }
 
-local exhaust_heat_capacity = 0.1
+local exhaust_heat_capacity = 0.5
 
 data:extend{
   {
