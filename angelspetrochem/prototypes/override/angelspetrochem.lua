@@ -289,3 +289,148 @@ else
   )
   angelsmods.functions.add_flag("liquid-cupric-chloride-solution", "hidden")
 end
+
+-------------------------------------------------------------------------------
+-- FUEL VALUES ----------------------------------------------------------------
+-------------------------------------------------------------------------------
+--base fluid is methane, all others are based on relative real values
+--==BASED ON VOULMETRIC NUMBERS divided by 10, using methane as the base
+local Energy_table = {
+  --liquid Naphtha (heavy oil), bobs value is 1MJ (Heavy fuel oil 38.2 MJ/L)(39 MJ/kg)
+  ["liquid-naphtha"]     = { fv = 244.7, bp = 260, em = 3, turr = false },
+  ["heavy-oil"]          = { fv = angelsmods.trigger.enableconverter and 244.7 or nil, bp = 260, turr = angelsmods.trigger.enableconverter and true or false },
+  --liquid Fuel oil (light oil), bobs value 1.5MJ (light fuel oil 39 MJ/L)(40.6 MJ/kg)
+  ["liquid-fuel-oil"]    = { fv = 249.9, bp = 180, em = 2, turr = false }, --was 24.99kJ
+  ["light-oil"]          = { fv = angelsmods.trigger.enableconverter and 249.9 or nil, bp = 180, turr = angelsmods.trigger.enableconverter and true or false },
+  --gas methane (petrogas), bobs value 2.3MJ (methane 35.9 MJ/L)(49.85 MJ/kg)
+  ["gas-methane"]        = { fv = 230,   bp = -161, },
+  ["petroleum-gas"]      = { fv = angelsmods.trigger.enableconverter and 230 or nil, bp = -161, turr = angelsmods.trigger.enableconverter and true or false },
+  ["gas-ethane"]         = { fv = 388.9, bp = -88.6, em = 1.5 }, --gas ethane (), - (ethane 60.7 MJ/L)(47.2 MJ/kg)
+  ["gas-butane"]         = { fv = 710.5, bp = -0.5, em = 1.8 }, --gas butane (), - (butane 110.9 MJ/L)(46.46 MJ/kg)
+  ["gas-propene"]        = { fv = 521.5, bp = -47.7, em = 5 }, --gas propene (), - (propylene 81.4 MJ/L)(45.8 MJ/kg)
+  ["gas-methanol"]       = { fv = 140.6, bp = 65 }, --gas methanol (), - (methanol(L) 15.8 MJ/L)(19.9 MJ/kg)
+  ["gas-ethylene"]       = { fv = 263.6, bp = -104 }, --gas ethylene (), - (ethylene conversion from ethane, 263.6 = 0.75*388.9*1411/1561
+  ["gas-benzene"]        = { fv = 234.8, bp = 80.1, em = 6 }, --(benzene 36.65 MJ/L = 0.876 kg/L * 78.11 g/mol * 3268 kJ/mol)
+  ["crude-oil"]          = { fv = 208.5, bp = 258, turr = false }, --liquid crude (crude oil) sum of parts minus 15%
+  ["liquid-mineral-oil"] = { fv = 239.6, bp = 370, em = 5 }, -- (parrafin(L) 37.4 MJ/L)
+  ["liquid-condensates"] = { fv = 244.7, bp =-44, em = 3 }, -- (LPG 24.4 MJ/L)
+  ["liquid-ngl"]         = { fv = 373.8, bp =-107.2, em = 3 }, -- sum of parts minus 15%
+  ["gas-hydrogen"]       = { fv = 33,    bp = -252.9, em = 0.2 --[[>>(may need to go much lower) meant to be 66kJ, but dropped to 33 for reasons.]] }, --gas hydrogen (), bobs value is 45kJ (hydrogen 10.3 MJ/L)(120.1 MJ/kg)
+  ["gas-hydrazine"]      = { fv = 126.9, bp = 114, em = 0.1 }, --gas hydrazine (), bobs value is 340kJ (hydrazine 19.8 MJ/L)(19.4 MJ/kg)
+  ["liquid-fuel"]        = { fv = 300,   bp = 200, em = 1.5, turr = false }, --down from 2.3MJ. Guessed on bp
+  ["gas-ethanol"]        = { fv = 255.4, bp = 77.8 }, --liquid ethanol (), - (ethanol(L), stoichiometric with ethylene, relative molar heats of combustion, 255.4 = 263.6*1367/1411)
+  ["liquid-glycerol"]    = { fv = 145.1, bp = 290 } --liquid glycerol (22.6 MJ/L = 1.261 kg/L * 92.1 g/mol * 1654 kJ/mol)
+}
+
+local exhaust_heat_capacity = 0.1
+
+data:extend{
+  {
+    type = "fluid",
+    name = "gas-exhaust",
+    localised_description = nil,
+    icons = angelsmods.functions.create_gas_fluid_icon(
+      {"__angelspetrochem__/graphics/icons/molecules/carbon-monoxide.png", 72},
+      "CCOc"
+    ),
+    --icon_size = 32,
+    subgroup = "petrochem-basic-fluids",
+    order = "f",
+    default_temperature = 100,
+    gas_temperature = 25,
+    heat_capacity = exhaust_heat_capacity.."KJ",
+    base_color = angelsmods.functions.fluid_color("CO"),--{r = 1, g = 0.4, b = 0.4},
+    flow_color = angelsmods.functions.flow_color("CO"),--{r = 1, g = 0.4, b = 0.4},
+    max_temperature = 1500,
+  }, {
+    type = "fluid",
+    name = "mechanical-rotary-power",
+    localised_description = nil,
+    icons = angelsmods.functions.create_gas_fluid_icon(
+        { "__angelspetrochem__/graphics/icons/molecules/carbon-monoxide.png", 72 },
+        "CCOc"
+    ),
+    --icon_size = 32,
+    subgroup = "petrochem-basic-fluids",
+    order = "f",
+    default_temperature = 100,
+    gas_temperature = 25,
+    heat_capacity = "0.1KJ",
+    base_color = angelsmods.functions.fluid_color("CO"), --{r = 1, g = 0.4, b = 0.4},
+    flow_color = angelsmods.functions.flow_color("CO"), --{r = 1, g = 0.4, b = 0.4},
+    max_temperature = 1500,
+  }
+}
+local max_bp = 370 -- mineral oil/paraffin
+local min_bp = -252.9 -- hydrogen
+local max_eff = 0.8
+local min_eff = 0.25
+local slope = (max_eff - min_eff) / (max_bp - min_bp)
+
+local function calc_torque_eff(bp)
+    return (bp - min_bp) * slope + min_eff
+end
+
+-- gas-exhaust and mechanical-rotary-power
+local function make_fluid_burning_recipes(fluid_name, vals)
+  local torque_eff = calc_torque_eff(vals.bp)
+  -- values in kJ
+  local torque = vals.fv*torque_eff
+  local heat   = vals.fv*(1-torque_eff)
+  local temperature = heat/exhaust_heat_capacity+100
+
+  return {{
+    type = "recipe",
+    name = "angels-"..fluid_name.."ccgt-burning-with-exhaust",
+    category = "",
+    subgroup = "",
+    energy_required = 1,
+    enabled = false,
+    ingredients = {
+      {type = "fluid", name = fluid_name, amount = 100}
+    },
+    results = {
+      {type = "fluid", name = "mechanial-rotary-power", amount = torque, temperature = 15,   fluidbox_index = 2},
+      {type = "fluid", name = "gas-exhaust",            amount = 100, temperature = temperature, fluidbox_index = 3}
+    },
+    always_show_products = true,
+    icons = nil,
+    crafting_machine_tint = nil
+  },{
+      type = "recipe",
+      name = "angels-" .. fluid_name .. "gas-turbine-burning",
+      category = "",
+      subgroup = "",
+      energy_required = 1,
+      enabled = false,
+      ingredients = {
+        { type = "fluid", name = fluid_name, amount = 100 }
+      },
+      results = {
+        { type = "fluid", name = "mechanial-rotary-power", amount = torque, temperature = 15, fluidbox_index = 2 }
+      },
+      always_show_products = true,
+      icons = nil,
+      crafting_machine_tint = nil
+  }
+}
+end
+
+local turret_params = data.raw["fluid-turret"]["flamethrower-turret"].attack_parameters.fluids
+
+for fluid, vals in pairs(Energy_table) do
+  local fluid_data = data.raw.fluid[fluid]
+  if vals.fv and fluid_data then
+    fluid_data.fuel_value = vals.fv .. "kJ"
+    fluid_data.emissions_multiplier = vals.em or data.raw.fluid[fluid].emissions_multiplier or 1
+    if vals.turr ~= false then
+      table.insert(turret_params, { type = fluid, damage_modifier = vals.fv / Energy_table["gas-methane"].fv })
+    end
+  --data:extend(make_fluid_burning_recipes(fluid, vals))
+  end
+end
+
+--fuel oil balancing
+if mods["bobplates"] then
+  data.raw.recipe["enriched-fuel-from-liquid-fuel"].ingredients = { { type = "fluid", name = "liquid-fuel", amount = 100 } } --up from 20
+end
