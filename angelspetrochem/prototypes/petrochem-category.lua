@@ -40,6 +40,12 @@ data:extend(
     {
       type = "recipe-category",
       name = "angels-chemical-void"
+    }, {
+      type = "recipe-category",
+      name = "angels-gas-turbine-burning"
+    }, {
+      type = "recipe-category",
+      name = "angels-ccgt-burning"
     },
     --SUBGROUPS
     --{
@@ -302,6 +308,79 @@ data:extend(
       name = "angels-chemical-void",
       group = "angels-void",
       order = "a-b[chemical]"
+    },
+    ---------------------------------------------------------------------------
+    -- ANGELS POWER -----------------------------------------------------------
+    ---------------------------------------------------------------------------
+{   
+      type = "item-group",
+      name = "angels-power",
+      order = "la[angels]-e[industries]-c",
+      icons = {
+        {
+          icon = "__angelsindustries__/graphics/technology/separator-tech.png",
+          icon_size = 128,
+          scale = 0.5
+        },
+        {
+          icon = "__angelsrefining__/graphics/icons/void.png",
+          icon_size = 32,
+          scale = 64 / 32 * 0.35,
+          shift = {20, -20}
+        }
+      }
+    },
+    {
+      type = "item-subgroup",
+      name = "angels-power-steam",
+      group = "angels-power",
+      order = "a[steam]-a"
+    },
+    {
+      type = "item-subgroup",
+      name = "angels-power-fluid-burning",
+      group = "angels-power",
+      order = "a[steam]-b"
+    },
+    {
+      type = "item-subgroup",
+      name = "angels-power-solar",
+      group = "angels-power",
+      order = "b[solar]-a"
+    },
+    {
+      type = "item-subgroup",
+      name = "angels-power-nuclear",
+      group = "angels-power",
+      order = "c[nuclear]-a"
+    },
+    {
+      type = "item-subgroup",
+      name = "angels-power-nuclear-processing",
+      group = "angels-power",
+      order = "d[nuclear-processing]-a"
+    },
+    {
+      type = "item-subgroup",
+      name = "angels-power-nuclear-fuel-cell",
+      group = "angels-power",
+      order = "d[nuclear-processing]-b"
+    },
+    {
+      type = "item-subgroup",
+      name = "angels-power-poles",
+      group = "angels-power",
+      order = "e[power-poles]-a"
+    }, {
+      type = "item-subgroup",
+      name = "angels-gas-turbine-burning",
+      group = "angels-power",
+      order = "f[gas-turbine-burning]"
+    }, {
+      type = "item-subgroup",
+      name = "angels-ccgt-burning",
+      group = "angels-power",
+      order = "g[ccgt-burning]"
     }
   }
 )

@@ -353,9 +353,9 @@ data:extend{
     --icon_size = 32,
     subgroup = "petrochem-basic-fluids",
     order = "f",
-    default_temperature = 100,
+    default_temperature = 0,
     gas_temperature = 25,
-    heat_capacity = "0.1KJ",
+    heat_capacity = "1KJ",
     base_color = angelsmods.functions.fluid_color("CO"), --{r = 1, g = 0.4, b = 0.4},
     flow_color = angelsmods.functions.flow_color("CO"), --{r = 1, g = 0.4, b = 0.4},
     max_temperature = 1500,
@@ -381,36 +381,42 @@ local function make_fluid_burning_recipes(fluid_name, vals)
 
   return {{
     type = "recipe",
-    name = "angels-"..fluid_name.."ccgt-burning-with-exhaust",
-    category = "",
-    subgroup = "",
+    name = "angels-"..fluid_name.."-ccgt-burning",
+    category = "angels-ccgt-burning",
+    subgroup = "angels-ccgt-burning",
     energy_required = 1,
-    enabled = false,
     ingredients = {
       {type = "fluid", name = fluid_name, amount = 100}
     },
     results = {
-      {type = "fluid", name = "mechanial-rotary-power", amount = torque, temperature = 15,   fluidbox_index = 2},
+      {type = "fluid", name = "mechanical-rotary-power", amount = 100, temperature = torque,   fluidbox_index = 2},
       {type = "fluid", name = "gas-exhaust",            amount = 100, temperature = temperature, fluidbox_index = 3}
     },
     always_show_products = true,
-    icons = nil,
+    icons = {
+        {
+        icon = "__angelsrefining__/graphics/icons/void.png",
+        icon_size = 32}
+    },
     crafting_machine_tint = nil
   },{
       type = "recipe",
-      name = "angels-" .. fluid_name .. "gas-turbine-burning",
-      category = "",
-      subgroup = "",
+      name = "angels-" .. fluid_name .. "-gas-turbine-burning",
+      category = "angels-gas-turbine-burning",
+      subgroup = "angels-gas-turbine-burning",
       energy_required = 1,
-      enabled = false,
       ingredients = {
         { type = "fluid", name = fluid_name, amount = 100 }
       },
       results = {
-        { type = "fluid", name = "mechanial-rotary-power", amount = torque, temperature = 15, fluidbox_index = 2 }
+        { type = "fluid", name = "mechanical-rotary-power", amount = 100, temperature = torque, fluidbox_index = 2 }
       },
-      always_show_products = true,
-      icons = nil,
+        always_show_products = true,
+        icons = {
+            {
+                icon = "__angelsrefining__/graphics/icons/void.png",
+                icon_size = 32 }
+        },
       crafting_machine_tint = nil
   }
 }
@@ -426,7 +432,7 @@ for fluid, vals in pairs(Energy_table) do
     if vals.turr ~= false then
       table.insert(turret_params, { type = fluid, damage_modifier = vals.fv / Energy_table["gas-methane"].fv })
     end
-  --data:extend(make_fluid_burning_recipes(fluid, vals))
+  data:extend(make_fluid_burning_recipes(fluid, vals))
   end
 end
 

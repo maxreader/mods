@@ -212,6 +212,7 @@ data.raw.boiler["fluid-burning-boiler"].energy_source =
   },
   burns_fluid = true,
   scale_fluid_usage = true,
+  destroy_non_fuel_fluid = false,
   smoke =
   {
     {
@@ -235,33 +236,39 @@ data.raw.boiler["fluid-burning-boiler"].energy_source =
 -- -- Tier 3 has 2 fluids out, exhaust at various temps feed the Tier 1 boiler system
 --------------------------------------------------------------------------------------------------
 data:extend({
-  util.merge{data.raw.boiler.boiler,
+  util.merge{data.raw["assembling-machine"]["assembling-machine-3"],
     {
       name = "fluid-burning-turbine",
       minable = {hardness = 0.2, mining_time = 0.5, result = "fluid-burning-turbine"},
       icon = "__base__/graphics/icons/assembling-machine-3.png",
       max_health = 300,
       target_temperature = 1000,
-      energy_consumption = "5.4MW",
+            energy_consumption = "5.4MW",
+            icons = {
+                {
+                    icon = "__angelsrefining__/graphics/icons/void.png",
+                    icon_size = 32 }
+            },
+            crafting_categories = {"angels-gas-turbine-burning"}
     }
   },
 })
 data:extend({
-  util.merge{data.raw.item.boiler,
+  util.merge{data.raw.item["assembling-machine-3"],
     {
       name = "fluid-burning-turbine",
       icon = "__base__/graphics/icons/assembling-machine-3.png",
       place_result = "fluid-burning-turbine",
-      stack_size = 10,
+      stack_size = 10
     }
   },
 })
   
-local turbo = data.raw.boiler["fluid-burning-turbine"]
+local turbo = data.raw["assembling-machine"]["fluid-burning-turbine"]
 turbo.energy_source =
 {
-  type = "fluid",
-  emissions_per_minute = 22.5,
+  type = "void",
+  --[[emissions_per_minute = 22.5,
   fluid_box =
   {
     base_area = 1,
@@ -289,35 +296,33 @@ turbo.energy_source =
       starting_vertical_speed = 0.0,
       starting_frame_deviation = 60
     }
-  }
+  }]]
 }
 turbo.collision_box = {{-1.35, -1.35}, {1.35, 1.35}}
 turbo.selection_box = {{-1.5, -1.5}, {1.5, 1.5}}
-turbo.fluid_box = --for non-mechanical fluid
-{
+turbo.fluid_boxes = --for non-mechanical fluid
+{{
   base_area = 0.5,
-  height = 1,
-  base_level = 1,
+  height = 2,
+  base_level = -1,
   pipe_covers = pipecoverspictures(),
-  filter = "gas-methane",
   pipe_connections =
   {
     { type = "output", position = {2, 0} },
   },
-  production_type = "output",
-}
-turbo.output_fluid_box = {
+  production_type = "input",
+},{
   base_area = 0.5,
   height = 1,
   base_level = -2,
   pipe_covers = pipecoverspictures(),
-  filter = "gas-methanol", --change to mechanical fluid
+  filter = "mechanical-rotary-power", --change to mechanical fluid
   pipe_connections =
   {
     { type = "output", position = {-2, 0} },
   },
   production_type = "output",
-}
+}}
 turbo.next_upgrade = nil
 turbo.fast_replaceable_group = nil
 turbo.structure =
@@ -331,19 +336,19 @@ data:extend(
 {
   { -- generator
     type = "generator",
-    name = "torque-converter",
+    name = "mechanical-rotary-generator",
     icon = "__base__/graphics/icons/assembling-machine-2.png",
     icon_size = 64,
     icon_mipmaps = 4,
     flags = {"placeable-neutral","player-creation"},
-    minable = {mining_time = 1, result = "torque-converter"},
+    minable = {mining_time = 1, result = "mechanical-rotary-generator"},
     max_health = 500,
     corpse = "big-remnants",
     dying_explosion = "medium-explosion",
     effectivity = 1,
     fluid_usage_per_tick = 1,
     maximum_temperature = 165,
-    burns_fluid = true,
+    burns_fluid = false,
     scale_fluid_usage = true,
     max_power_output = "1.8MW",
     resistances =
@@ -364,7 +369,7 @@ data:extend(
       base_area = 2,
       height = 2,
       base_level = -3,
-      filter = "gas-methanol",
+      filter = "mechanical-rotary-power",
       pipe_covers = pipecoverspictures(),
       pipe_connections =
       {
@@ -420,26 +425,141 @@ data:extend(
   },
 })
 data:extend({
-  util.merge{data.raw.item.boiler,
+  util.merge{data.raw.item["assembling-machine-2"],
     {
-      name = "fluid-burning-turbine",
-      icon = "__base__/graphics/icons/assembling-machine-3.png",
-      icon_size = 64,
-      icon_mipmaps = 4,
-      place_result = "fluid-burning-turbine",
-      stack_size = 10,
-    }
-  },
-})
-data:extend({
-  util.merge{data.raw.item.boiler,
-    {
-      name = "torque-converter",
+      name = "mechanical-rotary-generator",
       icon = "__base__/graphics/icons/assembling-machine-2.png",
       icon_size = 64,
       icon_mipmaps = 4,
-      place_result = "torque-converter",
+      place_result = "mechanical-rotary-generator",
       stack_size = 10,
     }
   },
 })
+
+--------------------------------------------------------------------------------------------------
+-- Tier 3 Combined Cycle Power Generation --
+-- Combined Cycle Gas Turbine - Burnable fluid in, rotary power and exhaust out
+-- Combined Cycle Exhaust Heat Exchanger - exhaust + water in, steam out
+--------------------------------------------------------------------------------------------------
+data:extend({
+    util.merge { data.raw["assembling-machine"]["assembling-machine-3"],
+        {
+            name = "combined-cycle-gas-turbine",
+            minable = { hardness = 0.2, mining_time = 0.5, result = "combined-cycle-gas-turbine" },
+            icon = "__base__/graphics/icons/assembling-machine-3.png",
+            max_health = 300,
+            target_temperature = 1000,
+            energy_consumption = "5.4MW",
+            crafting_categories = { "angels-ccgt-burning" }
+        }
+    },
+})
+data:extend({
+    util.merge { data.raw.item["assembling-machine-3"],
+        {
+            name = "combined-cycle-gas-turbine",
+            icon = "__base__/graphics/icons/assembling-machine-3.png",
+            place_result = "combined-cycle-gas-turbine",
+            stack_size = 10
+        }
+    },
+})
+
+local turbo2 = data.raw["assembling-machine"]["combined-cycle-gas-turbine"]
+turbo2.energy_source = {
+    type = "void"
+}
+turbo2.collision_box = { { -1.35, -1.35 }, { 1.35, 1.35 } }
+turbo2.selection_box = { { -1.5, -1.5 }, { 1.5, 1.5 } }
+turbo2.fluid_boxes = --for non-mechanical fluid
+{ {
+    base_area = 0.5,
+    height = 2,
+    base_level = -1,
+    pipe_covers = pipecoverspictures(),
+    pipe_connections = {
+        { type = "output", position = { 2, 0 } },
+    },
+    production_type = "input",
+}, {
+    base_area = 0.5,
+    height = 1,
+    base_level = -2,
+    pipe_covers = pipecoverspictures(),
+    filter = "mechanical-rotary-power", --change to mechanical fluid
+    pipe_connections = {
+        { type = "output", position = { -2, 0 } },
+    },
+    production_type = "output",
+}, {
+    base_area = 0.5,
+    height = 1,
+    base_level = -2,
+    pipe_covers = pipecoverspictures(),
+    filter = "gas-exhaust", 
+    pipe_connections = {
+        { type = "output", position = { 0, 2 } },
+    },
+    production_type = "output",
+} }
+turbo2.next_upgrade = nil
+turbo2.fast_replaceable_group = nil
+turbo2.structure = { north = new_fluid_burner_structure(),
+    east = new_fluid_burner_structure(),
+    south = new_fluid_burner_structure(),
+    west = new_fluid_burner_structure()
+}
+
+
+data:extend({
+    util.merge { data.raw.boiler.boiler,
+        {
+            name = "combined-cycle-heat-exchanger",
+            minable = { hardness = 0.2, mining_time = 0.5, result = "combined-cycle-heat-exchanger" },
+            max_health = 300,
+            target_temperature = 165,
+            energy_consumption = "10MW",
+        }
+    },
+})
+data:extend({
+    util.merge { data.raw.item.boiler,
+        {
+            name = "combined-cycle-heat-exchanger",
+            place_result = "combined-cycle-heat-exchanger",
+            stack_size = 10,
+        }
+    },
+})
+data.raw.boiler["combined-cycle-heat-exchanger"].energy_source = {
+    type = "fluid",
+    emissions_per_minute = 22.5,
+    fluid_box = {
+        base_area = 1,
+        height = 2,
+        base_level = -1,
+        pipe_connections = {
+            { type = "input", position = { 0, 1.5 } }
+        },
+        pipe_covers = pipecoverspictures(),
+        pipe_picture = assembler2pipepictures(),
+        production_type = "input",
+        filter = "gas-exhaust"
+    },
+    burns_fluid = false,
+    scale_fluid_usage = true,
+    destroy_non_fuel_fluid = false,
+    smoke = {
+        {
+            name = "smoke",
+            north_position = util.by_pixel(-38, -47.5),
+            south_position = util.by_pixel(38.5, -32),
+            east_position = util.by_pixel(20, -70),
+            west_position = util.by_pixel(-19, -8.5),
+            frequency = 15,
+            starting_vertical_speed = 0.0,
+            starting_frame_deviation = 60
+        }
+    }
+}

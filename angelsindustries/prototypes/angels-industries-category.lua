@@ -413,6 +413,7 @@ data:extend(
     ---------------------------------------------------------------------------
     -- ANGELS POWER -----------------------------------------------------------
     ---------------------------------------------------------------------------
+    -- I left this in to change the power icon back to the generator thingy
     {
       type = "item-group",
       name = "angels-power",
@@ -430,42 +431,6 @@ data:extend(
           shift = {20, -20}
         }
       }
-    },
-    {
-      type = "item-subgroup",
-      name = "angels-power-steam",
-      group = "angels-power",
-      order = "a[steam]-a"
-    },
-    {
-      type = "item-subgroup",
-      name = "angels-power-solar",
-      group = "angels-power",
-      order = "b[solar]-a"
-    },
-    {
-      type = "item-subgroup",
-      name = "angels-power-nuclear",
-      group = "angels-power",
-      order = "c[nuclear]-a"
-    },
-    {
-      type = "item-subgroup",
-      name = "angels-power-nuclear-processing",
-      group = "angels-power",
-      order = "d[nuclear-processing]-a"
-    },
-    {
-      type = "item-subgroup",
-      name = "angels-power-nuclear-fuel-cell",
-      group = "angels-power",
-      order = "d[nuclear-processing]-b"
-    },
-    {
-      type = "item-subgroup",
-      name = "angels-power-poles",
-      group = "angels-power",
-      order = "e[power-poles]-a"
     },
     ---------------------------------------------------------------------------
     -- ANGELS LOGISTICS -------------------------------------------------------

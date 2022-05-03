@@ -3,8 +3,6 @@
 
 -- components tab
 require("prototypes.ordening.angels-intermediates")
--- power tab
-require("prototypes.ordening.angels-power")
 -- logistics tab
 require("prototypes.ordening.angels-logistics")
 require("prototypes.ordening.angels-personal-equipment")

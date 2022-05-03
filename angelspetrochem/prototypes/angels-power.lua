@@ -1,6 +1,6 @@
 local move_item = angelsmods.functions.move_item
 
-if angelsmods.industries.overhaul then
+
   -----------------------------------------------------------------------------
   -- VANILLA POWER STUFFS -----------------------------------------------------
   -----------------------------------------------------------------------------
@@ -29,7 +29,7 @@ if angelsmods.industries.overhaul then
   move_item("medium-electric-pole", "angels-power-poles", "b[medium]")
   move_item("big-electric-pole", "angels-power-poles", "c[big]")
   move_item("substation", "angels-power-poles", "d[substation]")
-end
+
 
 if mods["bobpower"] then
   -----------------------------------------------------------------------------
