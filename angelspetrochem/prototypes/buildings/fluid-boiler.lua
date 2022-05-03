@@ -199,7 +199,7 @@ data.raw.boiler["fluid-burning-boiler"].energy_source =
   emissions_per_minute = 22.5,
   fluid_box =
   {
-    base_area = 1,
+    base_area = 10,
     height = 2,
     base_level = -1,
     pipe_connections =
@@ -236,11 +236,11 @@ data.raw.boiler["fluid-burning-boiler"].energy_source =
 -- -- Tier 3 has 2 fluids out, exhaust at various temps feed the Tier 1 boiler system
 --------------------------------------------------------------------------------------------------
 data:extend({
-  util.merge{data.raw["assembling-machine"]["assembling-machine-3"],
+  util.merge{data.raw["furnace"]["electric-furnace"],
     {
       name = "fluid-burning-turbine",
       minable = {hardness = 0.2, mining_time = 0.5, result = "fluid-burning-turbine"},
-      icon = "__base__/graphics/icons/assembling-machine-3.png",
+      icon = "__base__/graphics/icons/electric-furnace.png",
       max_health = 300,
       target_temperature = 1000,
             energy_consumption = "5.4MW",
@@ -254,17 +254,17 @@ data:extend({
   },
 })
 data:extend({
-  util.merge{data.raw.item["assembling-machine-3"],
+  util.merge{data.raw.item["electric-furnace"],
     {
       name = "fluid-burning-turbine",
-      icon = "__base__/graphics/icons/assembling-machine-3.png",
+      icon = "__base__/graphics/icons/electric-furnace.png",
       place_result = "fluid-burning-turbine",
       stack_size = 10
     }
   },
 })
   
-local turbo = data.raw["assembling-machine"]["fluid-burning-turbine"]
+local turbo = data.raw["furnace"]["fluid-burning-turbine"]
 turbo.energy_source =
 {
   type = "void",
@@ -302,21 +302,21 @@ turbo.collision_box = {{-1.35, -1.35}, {1.35, 1.35}}
 turbo.selection_box = {{-1.5, -1.5}, {1.5, 1.5}}
 turbo.fluid_boxes = --for non-mechanical fluid
 {{
-  base_area = 0.5,
+  base_area = 10,
   height = 2,
   base_level = -1,
   pipe_covers = pipecoverspictures(),
   pipe_connections =
   {
-    { type = "output", position = {2, 0} },
+    { type = "input", position = {2, 0} },
   },
   production_type = "input",
 },{
-  base_area = 0.5,
+  base_area = 20,
   height = 1,
   base_level = -2,
   pipe_covers = pipecoverspictures(),
-  filter = "mechanical-rotary-power", --change to mechanical fluid
+  filter = "mechanical-rotary-power",
   pipe_connections =
   {
     { type = "output", position = {-2, 0} },
@@ -366,9 +366,9 @@ data:extend(
     selection_box = {{-1.5, -1.5}, {1.5, 1.5}},
     fluid_box =
     {
-      base_area = 2,
-      height = 2,
-      base_level = -3,
+      base_area = 10,
+      height = 1,
+      base_level = -2,
       filter = "mechanical-rotary-power",
       pipe_covers = pipecoverspictures(),
       pipe_connections =
@@ -443,11 +443,11 @@ data:extend({
 -- Combined Cycle Exhaust Heat Exchanger - exhaust + water in, steam out
 --------------------------------------------------------------------------------------------------
 data:extend({
-    util.merge { data.raw["assembling-machine"]["assembling-machine-3"],
+    util.merge { data.raw["furnace"]["electric-furnace"],
         {
             name = "combined-cycle-gas-turbine",
             minable = { hardness = 0.2, mining_time = 0.5, result = "combined-cycle-gas-turbine" },
-            icon = "__base__/graphics/icons/assembling-machine-3.png",
+            icon = "__base__/graphics/icons/electric-furnace.png",
             max_health = 300,
             target_temperature = 1000,
             energy_consumption = "5.4MW",
@@ -456,17 +456,17 @@ data:extend({
     },
 })
 data:extend({
-    util.merge { data.raw.item["assembling-machine-3"],
+    util.merge { data.raw.item["electric-furnace"],
         {
             name = "combined-cycle-gas-turbine",
-            icon = "__base__/graphics/icons/assembling-machine-3.png",
+            icon = "__base__/graphics/icons/electric-furnace.png",
             place_result = "combined-cycle-gas-turbine",
             stack_size = 10
         }
     },
 })
 
-local turbo2 = data.raw["assembling-machine"]["combined-cycle-gas-turbine"]
+local turbo2 = data.raw["furnace"]["combined-cycle-gas-turbine"]
 turbo2.energy_source = {
     type = "void"
 }
@@ -474,16 +474,16 @@ turbo2.collision_box = { { -1.35, -1.35 }, { 1.35, 1.35 } }
 turbo2.selection_box = { { -1.5, -1.5 }, { 1.5, 1.5 } }
 turbo2.fluid_boxes = --for non-mechanical fluid
 { {
-    base_area = 0.5,
+    base_area = 10,
     height = 2,
     base_level = -1,
     pipe_covers = pipecoverspictures(),
     pipe_connections = {
-        { type = "output", position = { 2, 0 } },
+        { type = "input", position = { 2, 0 } },
     },
     production_type = "input",
 }, {
-    base_area = 0.5,
+    base_area = 40,
     height = 1,
     base_level = -2,
     pipe_covers = pipecoverspictures(),
@@ -493,9 +493,9 @@ turbo2.fluid_boxes = --for non-mechanical fluid
     },
     production_type = "output",
 }, {
-    base_area = 0.5,
+    base_area = 400,
     height = 1,
-    base_level = -2,
+    base_level = 1,
     pipe_covers = pipecoverspictures(),
     filter = "gas-exhaust", 
     pipe_connections = {
@@ -536,7 +536,7 @@ data.raw.boiler["combined-cycle-heat-exchanger"].energy_source = {
     type = "fluid",
     emissions_per_minute = 22.5,
     fluid_box = {
-        base_area = 1,
+        base_area = 10,
         height = 2,
         base_level = -1,
         pipe_connections = {

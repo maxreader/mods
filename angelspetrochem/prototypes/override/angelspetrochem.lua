@@ -386,11 +386,11 @@ local function make_fluid_burning_recipes(fluid_name, vals)
     subgroup = "angels-ccgt-burning",
     energy_required = 1,
     ingredients = {
-      {type = "fluid", name = fluid_name, amount = 100}
+      {type = "fluid", name = fluid_name, amount = 100, fluid_box_index = 1}
     },
     results = {
-      {type = "fluid", name = "mechanical-rotary-power", amount = 100, temperature = torque,   fluidbox_index = 2},
-      {type = "fluid", name = "gas-exhaust",            amount = 100, temperature = temperature, fluidbox_index = 3}
+      {type = "fluid", name = "mechanical-rotary-power", amount = 100, temperature = torque},
+      {type = "fluid", name = "gas-exhaust",            amount = 100, temperature = temperature}
     },
     always_show_products = true,
     icons = {
@@ -409,7 +409,7 @@ local function make_fluid_burning_recipes(fluid_name, vals)
         { type = "fluid", name = fluid_name, amount = 100 }
       },
       results = {
-        { type = "fluid", name = "mechanical-rotary-power", amount = 100, temperature = torque, fluidbox_index = 2 }
+        { type = "fluid", name = "mechanical-rotary-power", amount = 100, temperature = torque}
       },
         always_show_products = true,
         icons = {
