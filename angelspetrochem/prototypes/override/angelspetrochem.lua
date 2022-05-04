@@ -389,7 +389,7 @@ local function make_fluid_burning_recipes(fluid_name, vals)
       {type = "fluid", name = fluid_name, amount = 100, fluid_box_index = 1}
     },
     results = {
-      {type = "fluid", name = "mechanical-rotary-power", amount = 100, temperature = torque},
+      {type = "fluid", name = "mechanical-rotary-power", amount = torque, temperature = 125},
       {type = "fluid", name = "gas-exhaust",            amount = 100, temperature = temperature}
     },
     always_show_products = true,
@@ -409,7 +409,7 @@ local function make_fluid_burning_recipes(fluid_name, vals)
         { type = "fluid", name = fluid_name, amount = 100 }
       },
       results = {
-        { type = "fluid", name = "mechanical-rotary-power", amount = 100, temperature = torque}
+        { type = "fluid", name = "mechanical-rotary-power", amount = torque, temperature = 125}
       },
         always_show_products = true,
         icons = {
