@@ -318,7 +318,7 @@ data:extend(
       order = "la[angels]-e[industries]-c",
       icons = {
         {
-          icon = "__angelsindustries__/graphics/technology/separator-tech.png",
+          icon = "__angelspetrochem__/graphics/technology/separator-tech.png",
           icon_size = 128,
           scale = 0.5
         },
