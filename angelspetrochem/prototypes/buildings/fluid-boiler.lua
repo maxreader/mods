@@ -242,8 +242,7 @@ data:extend({
       minable = {hardness = 0.2, mining_time = 0.5, result = "fluid-burning-turbine"},
       icon = "__base__/graphics/icons/electric-furnace.png",
       max_health = 300,
-      target_temperature = 1000,
-            energy_consumption = "5.4MW",
+            crafting_speed = 1,
             icons = {
                 {
                     icon = "__angelsrefining__/graphics/icons/void.png",
@@ -346,11 +345,11 @@ data:extend(
     corpse = "big-remnants",
     dying_explosion = "medium-explosion",
     effectivity = 1,
-    fluid_usage_per_tick = 1,
-    maximum_temperature = 165,
+    fluid_usage_per_tick = 1000/60, -- 10 MW / 60 ticks
+    maximum_temperature = 125,
     burns_fluid = false,
     scale_fluid_usage = true,
-    max_power_output = "1.8MW",
+    max_power_output = "10MW",
     resistances =
     {
       {
@@ -449,8 +448,7 @@ data:extend({
             minable = { hardness = 0.2, mining_time = 0.5, result = "combined-cycle-gas-turbine" },
             icon = "__base__/graphics/icons/electric-furnace.png",
             max_health = 300,
-            target_temperature = 1000,
-            energy_consumption = "5.4MW",
+            crafting_speed = 1,
             crafting_categories = { "angels-ccgt-burning" }
         }
     },
@@ -493,7 +491,7 @@ turbo2.fluid_boxes = --for non-mechanical fluid
     },
     production_type = "output",
 }, {
-    base_area = 400,
+    base_area = 40,
     height = 1,
     base_level = 1,
     pipe_covers = pipecoverspictures(),
@@ -519,7 +517,7 @@ data:extend({
             minable = { hardness = 0.2, mining_time = 0.5, result = "combined-cycle-heat-exchanger" },
             max_health = 300,
             target_temperature = 165,
-            energy_consumption = "10MW",
+            energy_consumption = "10.8MW",
         }
     },
 })

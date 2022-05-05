@@ -371,13 +371,24 @@ local function calc_torque_eff(bp)
     return (bp - min_bp) * slope + min_eff
 end
 
+local function round_value(num, places)
+    local m = 10 ^ (places or 0)
+    return math.floor(num * m + 0.5) / m
+end
+
 -- gas-exhaust and mechanical-rotary-power
 local function make_fluid_burning_recipes(fluid_name, vals)
   local torque_eff = calc_torque_eff(vals.bp)
   -- values in kJ
-  local torque = vals.fv*torque_eff
+  local torque = round_value(vals.fv*torque_eff, 0  )
   local heat   = vals.fv*(1-torque_eff)
-  local temperature = heat/exhaust_heat_capacity+100
+  local temperature = round_value(heat/exhaust_heat_capacity+100, 0 )
+  -- We want the T2 recipe to have a rotary wattage of 10 MW, and the T3 wattage to be 40 MW
+  -- rotary-power is 100 kJ per unit, so we want to make 100, 400 units of rotary power
+  -- multiply units by (100/torque), (400/torque)
+  -- multiply by 0.8 to account for max_eff
+  local CCGT_wattage = 40 * max_eff -- MW
+  local gas_turbine_wattage = 10 * max_eff -- MW
 
   return {{
     type = "recipe",
@@ -386,11 +397,11 @@ local function make_fluid_burning_recipes(fluid_name, vals)
     subgroup = "angels-ccgt-burning",
     energy_required = 1,
     ingredients = {
-      {type = "fluid", name = fluid_name, amount = 100, fluid_box_index = 1}
+      {type = "fluid", name = fluid_name, amount = 1000/torque*CCGT_wattage, fluid_box_index = 1}
     },
     results = {
-      {type = "fluid", name = "mechanical-rotary-power", amount = torque, temperature = 125},
-      {type = "fluid", name = "gas-exhaust",            amount = 100, temperature = temperature}
+      {type = "fluid", name = "mechanical-rotary-power", amount = 10*CCGT_wattage, temperature = 125},
+      {type = "fluid", name = "gas-exhaust",            amount = 1000/torque*CCGT_wattage, temperature = temperature}
     },
     always_show_products = true,
     icons = {
@@ -406,10 +417,10 @@ local function make_fluid_burning_recipes(fluid_name, vals)
       subgroup = "angels-gas-turbine-burning",
       energy_required = 1,
       ingredients = {
-        { type = "fluid", name = fluid_name, amount = 100 }
+        { type = "fluid", name = fluid_name, amount = 1000/torque*gas_turbine_wattage }
       },
       results = {
-        { type = "fluid", name = "mechanical-rotary-power", amount = torque, temperature = 125}
+        { type = "fluid", name = "mechanical-rotary-power", amount = 10*gas_turbine_wattage, temperature = 125}
       },
         always_show_products = true,
         icons = {
