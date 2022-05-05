@@ -516,8 +516,8 @@ data:extend({
             name = "combined-cycle-heat-exchanger",
             minable = { hardness = 0.2, mining_time = 0.5, result = "combined-cycle-heat-exchanger" },
             max_health = 300,
-            target_temperature = 165,
-            energy_consumption = "10.8MW",
+            target_temperature = 500,
+            energy_consumption = "11.64MW",
         }
     },
 })

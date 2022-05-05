@@ -336,7 +336,7 @@ data:extend{
     --icon_size = 32,
     subgroup = "petrochem-basic-fluids",
     order = "f",
-    default_temperature = 100,
+    default_temperature = 500,
     gas_temperature = 25,
     heat_capacity = exhaust_heat_capacity.."KJ",
     base_color = angelsmods.functions.fluid_color("CO"),--{r = 1, g = 0.4, b = 0.4},
@@ -382,7 +382,7 @@ local function make_fluid_burning_recipes(fluid_name, vals)
   -- values in kJ
   local torque = round_value(vals.fv*torque_eff, 0  )
   local heat   = vals.fv*(1-torque_eff)
-  local temperature = round_value(heat/exhaust_heat_capacity+100, 0 )
+  local temperature = round_value(heat/exhaust_heat_capacity+500, 0 )
   -- We want the T2 recipe to have a rotary wattage of 10 MW, and the T3 wattage to be 40 MW
   -- rotary-power is 100 kJ per unit, so we want to make 100, 400 units of rotary power
   -- multiply units by (100/torque), (400/torque)
